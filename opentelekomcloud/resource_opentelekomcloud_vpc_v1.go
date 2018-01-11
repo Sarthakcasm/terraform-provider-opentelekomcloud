@@ -9,7 +9,24 @@ import (
 
 	"github.com/gophercloud/gophercloud"
 	"github.com/hashicorp/terraform/helper/resource"
+	"strings"
 )
+
+func ExtractValSFromVpcid(s string) (string, string) {
+	rgs := strings.Split(s, ":")
+	if len(rgs) >= 2 {
+		log.Printf("[DEBUG] ExtractValSFromNid: %s:%s from (%s)", rgs[0], rgs[1], s)
+		return rgs[0], rgs[1]
+	}
+	log.Printf("[DEBUG] ExtractValSFromNid: true:'%s' from (%s)", s, s)
+	return "true", s
+}
+
+func suppressAsvpcDiff(k, old, new string, d *schema.ResourceData) bool {
+	_, id_old := ExtractValSFromVpcid(old)
+	_, id_new := ExtractValSFromVpcid(new)
+	return id_old == id_new
+}
 
 func resourceVirtualPrivateCloudV1() *schema.Resource {
 	return &schema.Resource{
