@@ -150,7 +150,7 @@ resource "opentelekomcloud_subnet_v1" "subnet_1" {
 `
 
 const testAccSubnetV1_update = `
-resource "opentelekomcloud_subnet_v1" "selected" {
+resource "opentelekomcloud_subnet_v1" "subnet_1" {
   cidr = "192.168.0.0/16"
   name = "terraform_provider_test1"
   gateway_ip = "192.168.0.1"
@@ -159,7 +159,7 @@ resource "opentelekomcloud_subnet_v1" "selected" {
 }
 `
 const testAccSubnetV1_timeout = `
-resource "opentelekomcloud_subnet_v1" "selected" {
+resource "opentelekomcloud_subnet_v1" "subnet_1" {
   cidr = "192.168.0.0/16"
   name = "terraform_provider_test1"
   gateway_ip = "192.168.0.1"
