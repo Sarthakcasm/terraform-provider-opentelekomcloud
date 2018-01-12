@@ -13,7 +13,7 @@ import (
 func TestAccOTCSubnetV1DataSource_basic(t *testing.T) {
 	rand.Seed(time.Now().UTC().UnixNano())
 	rInt := rand.Intn(50)
-	cidr := fmt.Sprintf("172.16.%d.0/24", rInt)
+	cidr := fmt.Sprintf("192.168.%d.0/24", rInt)
 	name := fmt.Sprintf("terraform-testacc-subnet-data-source-%d", rInt)
 	resource.Test(t, resource.TestCase{
 		PreCheck:  func() { testAccPreCheck(t) },
@@ -29,12 +29,8 @@ func TestAccOTCSubnetV1DataSource_basic(t *testing.T) {
 						"data.opentelekomcloud_subnet_v1.by_id", "gateway_ip", "192.168.0.1"),
 					resource.TestCheckResourceAttr(
 						"data.opentelekomcloud_subnet_v1.by_id", "availability_zone", "eu-de-02"),
-					resource.TestCheckResourceAttr(
-						"data.opentelekomcloud_subnet_v1.by_id", "status", "ACTIVE"),
-					resource.TestCheckResourceAttr(
-						"data.opentelekomcloud_subnet_v1.by_id", "primary_dns", "114.114.114.114"),
-					resource.TestCheckResourceAttr(
-						"data.opentelekomcloud_subnet_v1.by_id", "secondary_dns", "114.114.115.115"),
+
+
 				),
 			},
 		},
