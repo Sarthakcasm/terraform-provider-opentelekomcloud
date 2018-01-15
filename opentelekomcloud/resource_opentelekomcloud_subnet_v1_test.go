@@ -11,56 +11,56 @@ import (
 )
 
 // PASS
-func TestAccOTCSubnetV1_basic(t *testing.T) {
+func TestAccSubnetV1_basic(t *testing.T) {
 	var subnet subnets.Subnet
 
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
-		CheckDestroy: testAccCheckOTCSubnetV1Destroy,
+		CheckDestroy: testAccCheckSubnetV1Destroy,
 		Steps: []resource.TestStep{
 			resource.TestStep{
 				Config: testAccSubnetV1_basic,
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckOTCSubnetV1Exists("opentelekomcloud_subnet_v1.subnet_1", &subnet),
+					testAccCheckSubnetV1Exists("opentelekomcloud_subnet_v1.subnet_1", &subnet),
 					resource.TestCheckResourceAttr(
-						"opentelekomcloud_subnet_v1.subnet_1", "name", "terraform_provider_test"),
+						"opentelekomcloud_subnet_v1.subnet_1", "name", "opentelekomcloud_subnet"),
 					resource.TestCheckResourceAttr(
 						"opentelekomcloud_subnet_v1.subnet_1", "cidr", "192.168.0.0/16"),
 					resource.TestCheckResourceAttr(
 						"opentelekomcloud_subnet_v1.subnet_1", "gateway_ip", "192.168.0.1"),
 					resource.TestCheckResourceAttr(
-						"opentelekomcloud_subnet_v1.subnet_1", "vpc_id", "8f794f06-2275-4d82-9f5a-6d68fbe21a75"),
-					resource.TestCheckResourceAttr(
 						"opentelekomcloud_subnet_v1.subnet_1", "availability_zone", "eu-de-02"),
 				),
 			},
+
 		},
 	})
 }
 
-func TestAccOTCSubnetV1_update(t *testing.T) {
+func TestAccSubnetV1_update(t *testing.T) {
 	var subnet subnets.Subnet
 
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
-		CheckDestroy: testAccCheckOTCSubnetV1Destroy,
+		CheckDestroy: testAccCheckSubnetV1Destroy,
 		Steps: []resource.TestStep{
 			resource.TestStep{
 				Config: testAccSubnetV1_basic,
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckOTCSubnetV1Exists("opentelekomcloud_subnet_v1.subnet_1", &subnet),
+					testAccCheckSubnetV1Exists("opentelekomcloud_subnet_v1.subnet_1", &subnet),
 					resource.TestCheckResourceAttr(
-						"opentelekomcloud_subnet_v1.subnet_1", "name", "terraform_provider_test"),
+						"opentelekomcloud_subnet_v1.subnet_1", "name", "opentelekomcloud_subnet"),
+
 				),
 			},
 			resource.TestStep{
 				Config: testAccSubnetV1_update,
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckOTCSubnetV1Exists("opentelekomcloud_subnet_v1.subnet_1", &subnet),
 					resource.TestCheckResourceAttr(
-						"opentelekomcloud_subnet_v1.subnet_1", "name", "terraform_provider_test1"),
+						"opentelekomcloud_subnet_v1.subnet_1", "name", "opentelekomcloud_subnet_1"),
+
 				),
 			},
 		},
@@ -68,25 +68,25 @@ func TestAccOTCSubnetV1_update(t *testing.T) {
 }
 
 // PASS
-func TestAccOTCSubnetV1_timeout(t *testing.T) {
+func TestAccSubnetV1_timeout(t *testing.T) {
 	var subnet subnets.Subnet
 
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
-		CheckDestroy: testAccCheckOTCSubnetV1Destroy,
+		CheckDestroy: testAccCheckSubnetV1Destroy,
 		Steps: []resource.TestStep{
 			resource.TestStep{
 				Config: testAccSubnetV1_timeout,
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckOTCSubnetV1Exists("opentelekomcloud_subnet_v1.subnet_1", &subnet),
+					testAccCheckSubnetV1Exists("opentelekomcloud_subnet_v1.subnet_1", &subnet),
 				),
 			},
 		},
 	})
 }
 
-func testAccCheckOTCSubnetV1Destroy(s *terraform.State) error {
+func testAccCheckSubnetV1Destroy(s *terraform.State) error {
 	config := testAccProvider.Meta().(*Config)
 	subnetClient, err := config.subnetV1Client(OS_REGION_NAME)
 	if err != nil {
@@ -107,7 +107,7 @@ func testAccCheckOTCSubnetV1Destroy(s *terraform.State) error {
 	return nil
 }
 
-func testAccCheckOTCSubnetV1Exists(n string, vpc *subnets.Subnet) resource.TestCheckFunc {
+func testAccCheckSubnetV1Exists(n string, subnet *subnets.Subnet) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 		rs, ok := s.RootModule().Resources[n]
 		if !ok {
@@ -121,7 +121,7 @@ func testAccCheckOTCSubnetV1Exists(n string, vpc *subnets.Subnet) resource.TestC
 		config := testAccProvider.Meta().(*Config)
 		subnetClient, err := config.subnetV1Client(OS_REGION_NAME)
 		if err != nil {
-			return fmt.Errorf("Error creating OpenTelekomCloud vpc client: %s", err)
+			return fmt.Errorf("Error creating OpenTelekomCloud Vpc client: %s", err)
 		}
 
 		found, err := subnets.Get(subnetClient, rs.Primary.ID).Extract()
@@ -130,41 +130,61 @@ func testAccCheckOTCSubnetV1Exists(n string, vpc *subnets.Subnet) resource.TestC
 		}
 
 		if found.ID != rs.Primary.ID {
-			return fmt.Errorf("subnet not found")
+			return fmt.Errorf("Subnet not found")
 		}
 
-		*vpc = *found
+		*subnet = *found
 
 		return nil
 	}
 }
 
 const testAccSubnetV1_basic = `
-resource "opentelekomcloud_subnet_v1" "subnet_1" {
+resource "opentelekomcloud_vpc_v1" "vpc_1" {
+  name = "vpc_1"
   cidr = "192.168.0.0/16"
-  name = "terraform_provider_test"
+}
+
+resource "opentelekomcloud_subnet_v1" "subnet_1" {
+  name = "opentelekomcloud_subnet"
+  cidr = "192.168.0.0/16"
   gateway_ip = "192.168.0.1"
-  vpc_id ="8f794f06-2275-4d82-9f5a-6d68fbe21a75"
-  availability_zone ="eu-de-02"
+  vpc_id = "${opentelekomcloud_vpc_v1.vpc_v1.id}"
+  availability_zone = "eu-de-02"
+
 }
 `
 
 const testAccSubnetV1_update = `
-resource "opentelekomcloud_subnet_v1" "subnet_1" {
+resource "opentelekomcloud_vpc_v1" "vpc_1" {
+  name = "vpc_1"
   cidr = "192.168.0.0/16"
-  name = "terraform_provider_test1"
+}
+
+resource "opentelekomcloud_subnet_v1" "subnet_1" {
+  name = "opentelekomcloud_subnet_1"
+  cidr = "192.168.0.0/16"
   gateway_ip = "192.168.0.1"
-  vpc_id ="8f794f06-2275-4d82-9f5a-6d68fbe21a75"
-  availability_zone ="eu-de-02"
+  vpc_id = "${opentelekomcloud_vpc_v1.vpc_v1.id}"
+  availability_zone = "eu-de-02"
+
 }
 `
+
 const testAccSubnetV1_timeout = `
-resource "opentelekomcloud_subnet_v1" "subnet_1" {
+rresource "opentelekomcloud_vpc_v1" "vpc_1" {
+  name = "vpc_1"
   cidr = "192.168.0.0/16"
-  name = "terraform_provider_test1"
+}
+
+resource "opentelekomcloud_subnet_v1" "subnet_1" {
+  name = "opentelekomcloud_subnet_1"
+  cidr = "192.168.0.0/16"
   gateway_ip = "192.168.0.1"
-  vpc_id ="8f794f06-2275-4d82-9f5a-6d68fbe21a75"
-  availability_zone ="eu-de-02"
+  vpc_id = "${opentelekomcloud_vpc_v1.vpc_v1.id}"
+  availability_zone = "eu-de-02"
+
+}
 
   timeouts {
     create = "5m"
