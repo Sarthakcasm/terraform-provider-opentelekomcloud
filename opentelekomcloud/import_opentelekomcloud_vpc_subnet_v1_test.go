@@ -13,10 +13,10 @@ func TestAccSubnetV1_importBasic(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
-		CheckDestroy: testAccCheckSubnetV1Destroy,
+		CheckDestroy: testAccCheckOTCVpcSubnetV1Destroy,
 		Steps: []resource.TestStep{
 			resource.TestStep{
-				Config: testAccSubnetV1_basic,
+				Config: testAccOTCVpcSubnetV1_basic,
 			},
 
 			resource.TestStep{

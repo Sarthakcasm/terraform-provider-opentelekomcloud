@@ -2,16 +2,14 @@ package opentelekomcloud
 
 import (
 	"fmt"
-	"math/rand"
 	"testing"
 
 	"github.com/hashicorp/terraform/helper/resource"
 	"github.com/hashicorp/terraform/terraform"
-	"time"
 )
 
 func TestAccOTCVpcSubnetV1DataSource_basic(t *testing.T) {
-	rand.Seed(time.Now().UTC().UnixNano())
+
 	resource.Test(t, resource.TestCase{
 		PreCheck:  func() { testAccPreCheck(t) },
 		Providers: testAccProviders,
@@ -57,7 +55,7 @@ resource "opentelekomcloud_vpc_v1" "vpc_1" {
 
 resource "opentelekomcloud_subnet_v1" "subnet_1" {
   name = "opentelekomcloud_subnet"
-  cidr = "opentelekomcloud_subnet"
+  cidr = "192.168.0.0/16"
   gateway_ip = "192.168.0.1"
   vpc_id = "${opentelekomcloud_vpc_v1.vpc_1.id}"
   availability_zone = "eu-de-02"
