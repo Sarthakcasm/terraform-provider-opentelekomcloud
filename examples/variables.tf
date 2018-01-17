@@ -36,6 +36,14 @@ variable "subnet_cidr" {
   default = "192.168.10.0/24"
 }
 
+variable "subnet_gateway_ip" {
+  default = "192.168.0.1"
+}
+
+variable "subnet_availability_zone" {
+  default = "eu-de-02"
+}
+
 variable "vpc_cidr" {
   default = "192.168.0.0/16"
 }
