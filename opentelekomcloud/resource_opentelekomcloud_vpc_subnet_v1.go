@@ -45,6 +45,8 @@ func resourceVpcSubnetV1() *schema.Resource {
 			"dhcp_enable": &schema.Schema{
 				Type:     schema.TypeBool,
 				Optional:true,
+				Default:      true,
+				ValidateFunc: validateTrueOnly,
 				ForceNew: false,
 			},
 			"primary_dns": &schema.Schema{
