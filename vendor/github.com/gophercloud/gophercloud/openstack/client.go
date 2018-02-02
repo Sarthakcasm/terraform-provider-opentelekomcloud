@@ -329,18 +329,7 @@ func NewNetworkV2(client *gophercloud.ProviderClient, eo gophercloud.EndpointOpt
 // NewVpcV1 creates a ServiceClient that may be used with the v1 VPC for OTC.
 func NewVpcV1(client *gophercloud.ProviderClient, eo gophercloud.EndpointOpts) (*gophercloud.ServiceClient, error) {
 	pid, e := GetProjectId(client)
-	if e != nil {
-		return nil, e
-	}
 
-	sc, err := initClientOpts(client, eo, "network")
-	sc.ResourceBase = sc.Endpoint + "v1/" + pid + "/"
-	return sc, err
-}
-
-// NewSubnetV1 creates a ServiceClient that may be used with the v1 Subnet for OTC.
-func NewSubnetV1(client *gophercloud.ProviderClient, eo gophercloud.EndpointOpts) (*gophercloud.ServiceClient, error) {
-	pid, e := GetProjectId(client)
 	if e != nil {
 		return nil, e
 	}
@@ -419,8 +408,11 @@ func NewCESClient(client *gophercloud.ProviderClient, eo gophercloud.EndpointOpt
 func NewSmnServiceV2(client *gophercloud.ProviderClient, eo gophercloud.EndpointOpts) (*gophercloud.ServiceClient, error) {
 
 	sc, err := initClientOpts(client, eo, "compute")
+
 	sc.Endpoint = strings.Replace(sc.Endpoint, "ecs", "smn", 1)
+
 	sc.ResourceBase = sc.Endpoint + "notifications/"
+
 	sc.Type = "smn"
 	return sc, err
 }
@@ -435,3 +427,40 @@ func NewRdsServiceV1(client *gophercloud.ProviderClient, eo gophercloud.Endpoint
 	newsc.Type = "rds"
 	return newsc, err
 }
+
+// NewSubnetV1 creates a ServiceClient that may be used with the v1 Subnet for OTC.
+func NewSubnetV1(client *gophercloud.ProviderClient, eo gophercloud.EndpointOpts) (*gophercloud.ServiceClient, error) {
+	pid, e := GetProjectId(client)
+	if e != nil {
+		return nil, e
+	}
+
+	sc, err := initClientOpts(client, eo, "network")
+	sc.ResourceBase = sc.Endpoint + "v1/" + pid + "/"
+	return sc, err
+}
+
+
+//Create EVS Service Client
+func NewListServiceV2(client *gophercloud.ProviderClient, eo gophercloud.EndpointOpts) (*gophercloud.ServiceClient, error) {
+
+	sc, err := initClientOpts(client, eo, "volume" )
+
+	sc.ResourceBase = sc.Endpoint + ""
+
+	sc.Type = "evs"
+	return sc, err
+}
+
+/*
+func NewEvsV2(client *gophercloud.ProviderClient, eo gophercloud.EndpointOpts) (*gophercloud.ServiceClient, error) {
+
+	pid, e := GetProjectId(client)
+	if e != nil {
+		return nil, e
+	}
+
+	sc, err := initClientOpts(client, eo, "network")
+	sc.ResourceBase = sc.Endpoint + "v2/" + pid + "/"
+	return sc, err
+}*/

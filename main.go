@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/gator1/terraform-provider-opentelekomcloud/opentelekomcloud" // TODO: Revert path when merge
+	"github.com/Sarthakcasm/terraform-provider-opentelekomcloud/opentelekomcloud" // TODO: Revert path when merge
 	"github.com/hashicorp/terraform/plugin"
 )
 

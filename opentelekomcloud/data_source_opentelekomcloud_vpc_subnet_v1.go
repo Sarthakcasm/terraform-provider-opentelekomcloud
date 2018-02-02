@@ -20,9 +20,9 @@ func dataSourceVpcSubnetV1() *schema.Resource {
 				Computed: true,
 			},
 			"name": &schema.Schema{
-				Type:     schema.TypeString,
+			Type:     schema.TypeString,
 				Optional: true,
-			},
+		},
 			"cidr": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
@@ -38,7 +38,7 @@ func dataSourceVpcSubnetV1() *schema.Resource {
 			"gateway_ip": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
-			},
+		},
 			"dhcp_enable": &schema.Schema{
 				Type:     schema.TypeBool,
 				Optional:true,

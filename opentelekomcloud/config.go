@@ -267,6 +267,13 @@ func (c *Config) vpcV1Client(region string) (*gophercloud.ServiceClient, error) 
 
 }
 
+func (c *Config) evsV2Client(region string) (*gophercloud.ServiceClient, error) {
+	return openstack.NewListServiceV2(c.OsClient, gophercloud.EndpointOpts{
+		Region:       c.determineRegion(region),
+		Availability: c.getEndpointType()})
+
+}
+
 func (c *Config) subnetV1Client(region string) (*gophercloud.ServiceClient, error) {
 	return openstack.NewSubnetV1(c.OsClient , gophercloud.EndpointOpts{
 		Region:       c.determineRegion(region),
